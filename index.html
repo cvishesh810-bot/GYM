@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>FBC MANAGEMENT</title>
+  <link rel="stylesheet" href="style.css?v=pay2">
+</head>
+
+<body>
+<div id="app">
+
+  <!-- ================= SIDEBAR / MOBILE BOTTOM NAV ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">FBC</div>
+      <div>
+        <b>FBC MANAGEMENT</b>
+        <small>Smart Gym System</small>
+      </div>
+    </div>
+
+    <nav>
+      <button class="nav active" data-page="dashboard"><span class="navIcon">🏠</span><span>Dashboard</span></button>
+      <button class="nav" data-page="members"><span class="navIcon">👥</span><span>Members</span></button>
+      <button class="nav" data-page="attendance"><span class="navIcon">📅</span><span>Attendance</span></button>
+      <button class="nav" data-page="payments"><span class="navIcon">💳</span><span>Payments</span></button>
+      <button class="nav" data-page="workouts"><span class="navIcon">🏋️</span><span>Workouts</span></button>
+      <button class="nav" data-page="diet"><span class="navIcon">🥗</span><span>Diet</span></button>
+      <button class="nav" data-page="trainers"><span class="navIcon">🧑‍🏫</span><span>Trainers</span></button>
+      <button class="nav" data-page="plans"><span class="navIcon">📋</span><span>Plans</span></button>
+      <button class="nav" data-page="reports"><span class="navIcon">📊</span><span>Reports</span></button>
+      <button class="nav" data-page="history"><span class="navIcon">🕘</span><span>History</span></button>
+      <button class="nav" data-page="backup"><span class="navIcon">☁️</span><span>Backup</span></button>
+    </nav>
+  </aside>
+
+  <main class="main">
+
+    <!-- ================= TOPBAR ================= -->
+    <header class="topbar">
+      <div class="topLeft">
+        <button id="menuBtn" class="iconBtn" aria-label="Menu">☰</button>
+        <div class="brandMini">FBC MANAGEMENT</div>
+        <span id="networkStatus" class="status online">● ONLINE</span>
+      </div>
+
+      <div class="topActions">
+        <button id="themeBtn" class="iconBtn" title="Dark mode">🌙</button>
+        <button id="quickAdd" class="primary">＋ <span>Add Member</span></button>
+      </div>
+    </header>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section id="dashboard" class="page active">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">FBC MANAGEMENT</p>
+          <h1>Smart Gym Dashboard</h1>
+          <p>Members • Payments • Attendance • Expiry Alerts</p>
+        </div>
+        <div class="heroIcon">🏆</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>👥</span>
+          <b id="statMembers">0</b>
+          <small>Total Members</small>
+        </div>
+        <div class="stat">
+          <span>✅</span>
+          <b id="statActive">0</b>
+          <small>Active Members</small>
+        </div>
+        <div class="stat">
+          <span>💰</span>
+          <b id="statRevenue">₹0</b>
+          <small>Total Paid</small>
+        </div>
+        <div class="stat">
+          <span>📅</span>
+          <b id="statToday">0</b>
+          <small>Today's Attendance</small>
+        </div>
+      </div>
+
+      <div id="smartStats" class="smartStats"></div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="cardHead">
+            <h2>Recent Members</h2>
+            <button class="linkBtn" data-go="members">View all</button>
+          </div>
+          <div id="recentMembers" class="list"></div>
+        </div>
+
+        <div class="card">
+          <div class="cardHead">
+            <h2>Quick Actions</h2>
+          </div>
+          <div class="quickGrid">
+            <button data-go="members" class="quick">👥<b>Add / Manage Members</b></button>
+            <button data-go="attendance" class="quick">📅<b>Mark Attendance</b></button>
+            <button data-go="payments" class="quick">💳<b>Add Payment</b></button>
+            <button data-go="backup" class="quick">☁️<b>Backup / Drive</b></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MEMBERS ================= -->
+    <section id="members" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>Members</h1>
+          <p>Manage members, fees, photos, ID proof and expiry.</p>
+        </div>
+        <button class="primary" id="addMemberBtn">＋ Add Member</button>
+      </div>
+
+      <div class="toolbar">
+        <input id="memberSearch" placeholder="Search name, phone, ID or Aadhaar...">
+        <select id="memberFilter">
+          <option value="all">All Members</option>
+          <option value="active">Active</option>
+          <option value="expired">Expired</option>
+          <option value="due">Payment Due</option>
+        </select>
+      </div>
+
+      <div id="memberCards" class="memberCards"></div>
+    </section>
+
+    <!-- ================= ATTENDANCE ================= -->
+    <section id="attendance" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>Attendance</h1>
+          <p>Quick member check-in.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="inline">
+          <select id="attendanceMember"></select>
+          <button class="primary" id="checkInBtn">✓ Check In</button>
+        </div>
+      </div>
+
+      <div class="card tableWrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Member</th><th>Time</th></tr>
+          </thead>
+          <tbody id="attendanceTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= PAYMENTS ================= -->
+    <section id="payments" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>Payments</h1>
+          <p>Track paid and pending member payments.</p>
+        </div>
+        <button class="primary" id="addPaymentBtn">＋ Add Payment</button>
+      </div>
+
+      <div class="card tableWrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Member</th><th>Amount</th><th>Method</th><th>Note</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= WORKOUTS ================= -->
+    <section id="workouts" class="page">
+      <div class="pageTitle">
+        <div><h1>Workouts</h1><p>Create member workout plans.</p></div>
+        <button class="primary" id="addWorkoutBtn">＋ Add Workout</button>
+      </div>
+      <div id="workoutList" class="cards"></div>
+    </section>
+
+    <!-- ================= DIET ================= -->
+    <section id="diet" class="page">
+      <div class="pageTitle">
+        <div><h1>Diet Plans</h1><p>Create diet and calorie plans.</p></div>
+        <button class="primary" id="addDietBtn">＋ Add Diet</button>
+      </div>
+      <div id="dietList" class="cards"></div>
+    </section>
+
+    <!-- ================= TRAINERS ================= -->
+    <section id="trainers" class="page">
+      <div class="pageTitle">
+        <div><h1>Trainers</h1><p>Manage gym trainers.</p></div>
+        <button class="primary" id="addTrainerBtn">＋ Add Trainer</button>
+      </div>
+      <div id="trainerList" class="cards"></div>
+    </section>
+
+    <!-- ================= PLANS ================= -->
+    <section id="plans" class="page">
+      <div class="pageTitle">
+        <div><h1>Membership Plans</h1><p>Plan fee and duration control.</p></div>
+        <button class="primary" id="addPlanBtn">＋ Add Plan</button>
+      </div>
+      <div id="planList" class="cards"></div>
+    </section>
+
+    <!-- ================= REPORTS ================= -->
+    <section id="reports" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>Smart Reports</h1>
+          <p>Payment, due, expiry and attendance reports.</p>
+        </div>
+      </div>
+
+      <div id="reportSmart" class="reportGrid"></div>
+
+      <div class="stats">
+        <div class="stat"><span>👥</span><b id="repMembers">0</b><small>Members</small></div>
+        <div class="stat"><span>💳</span><b id="repPayments">0</b><small>Payment Records</small></div>
+        <div class="stat"><span>📅</span><b id="repAttendance">0</b><small>Attendance Records</small></div>
+        <div class="stat"><span>⚠️</span><b id="repDueMembers">0</b><small>Due Members</small></div>
+      </div>
+
+      <div class="card">
+        <div class="cardHead">
+          <h2>Member Payment & Expiry Report</h2>
+        </div>
+        <div id="expiryList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- ================= HISTORY ================= -->
+    <section id="history" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>History</h1>
+          <p>Recent activity of members, payments, attendance and other actions.</p>
+        </div>
+        <button class="secondary" id="clearHistoryBtn">🗑 Clear History</button>
+      </div>
+
+      <div class="toolbar">
+        <input id="historySearch" placeholder="Search history...">
+        <select id="historyFilter">
+          <option value="all">All Activity</option>
+          <option value="member">Members</option>
+          <option value="payment">Payments</option>
+          <option value="attendance">Attendance</option>
+          <option value="workout">Workouts</option>
+          <option value="diet">Diet</option>
+          <option value="trainer">Trainers</option>
+          <option value="plan">Plans</option>
+          <option value="backup">Backup</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div id="historyList" class="historyList"></div>
+      </div>
+    </section>
+
+    <!-- ================= BACKUP ================= -->
+    <section id="backup" class="page">
+      <div class="pageTitle">
+        <div>
+          <h1>Backup / Google Drive</h1>
+          <p>Local backup works offline. Drive upload needs internet.</p>
+        </div>
+      </div>
+
+      <div class="backupGrid">
+        <div class="card">
+          <div class="backupIcon">💾</div>
+          <h2>Export Backup</h2>
+          <p>Download complete FBC data as JSON.</p>
+          <button class="primary fullBtn" id="exportBtn">⬇ Export Backup</button>
+        </div>
+
+        <div class="card">
+          <div class="backupIcon">☁️</div>
+          <h2>Google Drive</h2>
+          <p>Upload an FBC backup file to your Google Drive.</p>
+          <button class="primary fullBtn" id="driveBtn">☁️ Upload to Drive</button>
+          <small id="driveHint">Client ID is configured in config.js.</small>
+        </div>
+
+        <div class="card">
+          <div class="backupIcon">📥</div>
+          <h2>Import Backup</h2>
+          <p>Restore an exported FBC JSON file.</p>
+          <input type="file" id="importFile" accept=".json,application/json">
+          <button class="primary fullBtn" id="importBtn">⬆ Import Backup</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div id="modal" class="modal">
+  <div class="modalBox">
+    <button class="close" id="closeModal">×</button>
+    <h2 id="modalTitle">Add</h2>
+    <form id="modalForm"></form>
+  </div>
+</div>
+
+<!-- ================= PHOTO VIEWER ================= -->
+<div id="photoViewer" class="photoViewer" aria-hidden="true">
+  <button class="photoClose" id="photoClose" aria-label="Close">×</button>
+  <img id="photoViewerImg" src="" alt="Member photo">
+  <div id="photoViewerName" class="photoViewerName"></div>
+</div>
+
+<!-- ================= WHATSAPP MESSAGE ================= -->
+<div id="whatsappModal" class="waModal" aria-hidden="true">
+  <div class="waBox">
+    <button class="close" id="waClose">×</button>
+    <div class="waTitle"><span>🟢</span><div><h2>WhatsApp Message</h2><small id="waTo">To: Member</small></div></div>
+    <div class="waTemplates">
+      <button class="waTemplate active" data-template="payment">Payment Reminder</button>
+      <button class="waTemplate" data-template="expiry">Plan Expiry</button>
+    </div>
+    <label class="waLabel">Message Content</label>
+    <textarea id="waMessage" class="waMessage"></textarea>
+    <div class="waActions">
+      <button class="secondary" id="waCancel">Cancel</button>
+      <button class="waSend" id="waSend">Send WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="config.js"></script>
+<script src="script.js?v=pay2"></script>
+</body>
+</html>

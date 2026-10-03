@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login | FBC MANAGEMENT</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.loginPage{min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at top,#253b67,#0b1220 65%);padding:20px}
+.loginBox{width:min(430px,100%);background:#fff;border-radius:22px;padding:32px;box-shadow:0 25px 80px #0005;text-align:center}
+.loginLogo{width:72px;height:72px;margin:auto;border-radius:20px;background:linear-gradient(135deg,#38bdf8,#6366f1);display:grid;place-items:center;color:#fff;font-size:25px;font-weight:900}
+.loginBox h1{margin:16px 0 5px}.loginBox p{color:#52d6b5}.googleBtn{width:100%;margin-top:20px;border:1px solid #d8dee8;background:#fff;border-radius:10px;padding:12px;font-weight:700}.offlineBtn{width:100%;margin-top:10px;background:#111827;color:#fff;border-radius:10px;padding:12px;font-weight:700}.smallNote{font-size:12px;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="loginPage">
+  <div class="loginBox">
+    <div class="loginLogo">FBC</div>
+    <h1 style="color: cadetblue;">FBC MANAGEMENT</h1>
+    <p >Smart Gym Management System </p> 
+    <div id="googleButton"></div>
+    <button class="offlineBtn" id="offlineBtn">Continue </button>
+    <h2 style="color: rgba(36, 219, 112, 0.507);">DEGINED BY VISHWAS </h2>
+    <div id="loginMsg"></div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+const msg=t=>document.getElementById("loginMsg").textContent=t;
+document.getElementById("offlineBtn").onclick=()=>location.href="index.html";
+function handleCredentialResponse(response){
+  try{
+    const payload=JSON.parse(atob(response.credential.split(".")[1].replace(/-/g,"+").replace(/_/g,"/")));
+    localStorage.setItem("fbc_google_user",JSON.stringify({
+      name:payload.name||"",email:payload.email||"",picture:payload.picture||""
+    }));
+    location.href="index.html";
+  }catch(e){msg("Google login response could not be read.");}
+}
+window.onload=()=>{
+  if(!FBC_CONFIG.googleClientId || FBC_CONFIG.googleClientId.includes("PASTE_")) {
+    msg("Add your Google Client ID in config.js to enable Google Login.");
+    return;
+  }
+  if(window.google){
+    google.accounts.id.initialize({client_id:FBC_CONFIG.googleClientId,callback:handleCredentialResponse});
+    google.accounts.id.renderButton(document.getElementById("googleButton"),{theme:"outline",size:"large",width:330,text:"signin_with"});
+  }
+};
+</script>
+</body>
+</html>
